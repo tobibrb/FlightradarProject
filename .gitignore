@@ -1,5 +1,5 @@
 /build
-/flightradar.iml
+*.iml
 /.gradle
 /.idea
 
