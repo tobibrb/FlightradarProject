@@ -21,7 +21,7 @@ import java.util.List;
 public class AppMain {
     private static FlightMapper mapper;
 
-    private static final String APIURL = "http://krk.data.fr24.com/zones/fcgi/feed.json?array=0&bounds=54.0,50.0,10.0,15.0&adsb=1&mlat=1&flarm=1&faa=1&estimated=1&air=1&gliders=1&gnd=1&vehicles=1";
+    private static final String APIURL = "http://krk.data.fr24.com/zones/fcgi/feed.json?array=0&bounds=54.0,50.0,10.0,15.0";
     // private static final String APIURL = "http://data.flightradar24.com/zones/fcgi/full.json";
     // private static final String APIURL = "http://data.flightradar24.com/zones/fcgi/full_all.json";
 
