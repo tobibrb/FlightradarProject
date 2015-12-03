@@ -35,16 +35,15 @@ public class FlightMapper {
         mapper = new DynamoDBMapper(client);
         if (client.listTables().getTableNames().contains(TABLENAME)) {
             System.out.println("Table exists");
-        } else {
-
-            CreateTableRequest request = mapper.generateCreateTableRequest(Flight.class);
-            request.setProvisionedThroughput(new ProvisionedThroughput(10L, 5L));
-            table = dynamoDB.createTable(request);
-            try {
-                table.waitForActive();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            client.deleteTable(TABLENAME);
+        }
+        CreateTableRequest request = mapper.generateCreateTableRequest(Flight.class);
+        request.setProvisionedThroughput(new ProvisionedThroughput(10L, 5L));
+        table = dynamoDB.createTable(request);
+        try {
+            table.waitForActive();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -62,7 +61,7 @@ public class FlightMapper {
         JsonObject object = gson.fromJson(jsonString, JsonObject.class);
         Set<Map.Entry<String, JsonElement>> entrySet = object.entrySet();
         for (Map.Entry<String, JsonElement> entry : entrySet) {
-            if (entry.getKey().matches("^[A-Z0-9]+$")) {
+            try {
                 JsonArray array = entry.getValue().getAsJsonArray();
                 list.add(new Flight(entry.getKey(),                 // ID
                         gson.fromJson(array.get(0), String.class),   // Hexcode
@@ -84,6 +83,8 @@ public class FlightMapper {
                         gson.fromJson(array.get(16), String.class), // callsign
                         gson.fromJson(array.get(17), Long.class)    // unknown3
                 ));
+            } catch (IllegalStateException e) {
+                System.out.println("INFO: No Array");
             }
         }
         return list;

@@ -21,6 +21,10 @@ import java.util.List;
 public class AppMain {
     private static FlightMapper mapper;
 
+    private static final String APIURL = "http://krk.data.fr24.com/zones/fcgi/feed.json?array=0&bounds=54.0,50.0,10.0,15.0&adsb=1&mlat=1&flarm=1&faa=1&estimated=1&air=1&gliders=1&gnd=1&vehicles=1";
+    // private static final String APIURL = "http://data.flightradar24.com/zones/fcgi/full.json";
+    // private static final String APIURL = "http://data.flightradar24.com/zones/fcgi/full_all.json";
+
     @RequestMapping("/")
     @ResponseBody
     String home() {
@@ -30,8 +34,12 @@ public class AppMain {
          * ---------------------------------------------------------
          */
 
+        List<Flight> flights = mapper.findAll();
         StringBuilder builder = new StringBuilder();
-        for (Flight flight : mapper.findAll()) {
+        builder.append("Anzahl: ");
+        builder.append(flights.size());
+        builder.append("<br>");
+        for (Flight flight : flights) {
             builder.append(flight);
             builder.append("<br>");
         }
@@ -45,7 +53,7 @@ public class AppMain {
          * --------------------------------------------------------
          */
 
-        URL url = new URL("http://data.flightradar24.com/zones/fcgi/germany_all.json");
+        URL url = new URL(APIURL);
         URLConnection connection = url.openConnection();
         connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
         BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -59,7 +67,9 @@ public class AppMain {
         List<Flight> flights = FlightMapper.parseFlightsFromJson(jsonString);
         mapper = new FlightMapper();
         for (Flight flight : flights) {
-            mapper.createFlight(flight);
+            if (flight.getLatitude() > 51.21 && flight.getLatitude() < 53.33 && flight.getLongitude() > 11.16 && flight.getLongitude() < 14.46 ) {
+                mapper.createFlight(flight);
+            }
         }
 
 
