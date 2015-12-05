@@ -79,5 +79,13 @@ public class AppMain {
          */
         SpringApplication.run(AppMain.class, args);
     }
-
+/*
+TODO
+ @RequestMapping("/subscribe") mit Queryparameter ?email=email-adresse
+ -respone mit Messaage
+ fügt E-Mail Adresse zu E-mail Liste auf S3 hinzu.
+  @RequestMapping("/unsubscribe") mit Queryparameter ?email=email-adresse
+  -response mit Message
+  liest E-Mail liste von S3 und löscht E-Mail--> neue Datei hochladen zu S3
+ */
 }
