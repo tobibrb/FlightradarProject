@@ -3,6 +3,7 @@ package dataanalyser;
 import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
@@ -32,7 +33,7 @@ public class FlightMapper {
 
     public FlightMapper() {
         //client = new AmazonDynamoDBClient(new BasicAWSCredentials("Fake", "Fake"));
-        client = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderChain());
+        client = new AmazonDynamoDBClient(new EnvironmentVariableCredentialsProvider());
         //client.setEndpoint(ENDPOINT);
         dynamoDB = new DynamoDB(client);
         mapper = new DynamoDBMapper(client);

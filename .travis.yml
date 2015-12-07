@@ -6,6 +6,9 @@ services:
 before_install:
   - chmod +x gradlew
 after_success:
+  - echo -e "[default]\n" > build/libs/credentials
+  - echo -e "aws_access_key_id = $AWS_ACCESS_KEY" >> build/libs/credentials
+  - echo -e "aws_secret_access_key = $AWS_SECRET_KEY" >> build/libs/credentials
   - docker build -t cronjoe/flightradar .
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker push cronjoe/flightradar
