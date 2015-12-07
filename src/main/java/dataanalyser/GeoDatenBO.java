@@ -18,7 +18,7 @@ public class GeoDatenBO {
         boolean flightOverBrandenburg = false;
 
         if ((flight.getLongitude() >= 11.1605f && flight.getLongitude() <= 14.4605f) &&
-                (flight.getLongitude() >= 51.2132f && flight.getLongitude() <= 53.3335f)) {
+                (flight.getLatitude() >= 51.2132f && flight.getLatitude() <= 53.3335f)) {
             flightOverBrandenburg = checkWithGeoNames(flight.getLatitude(), flight.getLongitude(), "Brandenburg");
         }
         return flightOverBrandenburg;

@@ -1,5 +1,6 @@
 import dataanalyser.Flight;
 import dataanalyser.FlightMapper;
+import dataanalyser.GeoDatenBO;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -67,7 +68,7 @@ public class AppMain {
         List<Flight> flights = FlightMapper.parseFlightsFromJson(jsonString);
         mapper = new FlightMapper();
         for (Flight flight : flights) {
-            if (flight.getLatitude() > 51.21 && flight.getLatitude() < 53.33 && flight.getLongitude() > 11.16 && flight.getLongitude() < 14.46 ) {
+            if (GeoDatenBO.isFlightOverBrandenburg(flight)) {
                 mapper.createFlight(flight);
             }
         }
