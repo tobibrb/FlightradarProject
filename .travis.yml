@@ -11,7 +11,7 @@ deploy:
   secret_access_key: "$AWS_SECRET_KEY"
   bucket: "fhb-flight"
   skip_cleanup: true
-  local_dir: build
+  local_dir: build/libs
 
 #deploy:
 #  provider: releases
