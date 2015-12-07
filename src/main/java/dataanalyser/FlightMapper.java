@@ -1,6 +1,8 @@
 package dataanalyser;
 
+import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
@@ -19,7 +21,7 @@ import java.util.Set;
  */
 public class FlightMapper {
 
-    // lokale DynamoDB Installation
+    //lokale DynamoDB Installation
     private static final String ENDPOINT = "http://localhost:8000";
     private static final String TABLENAME = "Flightdata";
 
@@ -30,6 +32,7 @@ public class FlightMapper {
 
     public FlightMapper() {
         client = new AmazonDynamoDBClient(new BasicAWSCredentials("Fake", "Fake"));
+        //client = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderChain());
         client.setEndpoint(ENDPOINT);
         dynamoDB = new DynamoDB(client);
         mapper = new DynamoDBMapper(client);
