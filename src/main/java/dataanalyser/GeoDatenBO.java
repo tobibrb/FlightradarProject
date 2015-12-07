@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
 public class GeoDatenBO {
     static String USERNAME = "anderst";
 
-    public boolean isFlightOverBrandenburg(Flight flight) {
+    public static boolean isFlightOverBrandenburg(Flight flight) {
         boolean flightOverBrandenburg = false;
 
         if ((flight.getLongitude() >= 11.1605f && flight.getLongitude() <= 14.4605f) &&
