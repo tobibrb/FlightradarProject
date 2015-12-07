@@ -16,12 +16,14 @@ public class GeoDatenBO {
 
     public static boolean isFlightOverBrandenburg(Flight flight) {
         boolean flightOverBrandenburg = false;
+        boolean flightOverBerlin = false;
 
         if ((flight.getLongitude() >= 11.1605f && flight.getLongitude() <= 14.4605f) &&
                 (flight.getLatitude() >= 51.2132f && flight.getLatitude() <= 53.3335f)) {
             flightOverBrandenburg = checkWithGeoNames(flight.getLatitude(), flight.getLongitude(), "Brandenburg");
+            flightOverBerlin = checkWithGeoNames(flight.getLatitude(), flight.getLongitude(), "Berlin");
         }
-        return flightOverBrandenburg;
+        return (flightOverBrandenburg || flightOverBerlin);
     }
 
     static boolean checkWithGeoNames(float latitude, float longitude, String searchedRegion) {

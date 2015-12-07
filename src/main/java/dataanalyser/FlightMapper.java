@@ -64,7 +64,7 @@ public class FlightMapper {
             try {
                 JsonArray array = entry.getValue().getAsJsonArray();
                 list.add(new Flight(entry.getKey(),                 // ID
-                        gson.fromJson(array.get(0), String.class),   // Hexcode
+                        gson.fromJson(array.get(0), String.class),  // Hexcode
                         gson.fromJson(array.get(1), Float.class),   // Latitude
                         gson.fromJson(array.get(2), Float.class),   // Longitude
                         gson.fromJson(array.get(3), Integer.class), // Track
