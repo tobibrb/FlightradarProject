@@ -22,7 +22,7 @@ import java.util.Set;
 public class FlightMapper {
 
     //lokale DynamoDB Installation
-    private static final String ENDPOINT = "http://localhost:8000";
+    //private static final String ENDPOINT = "http://localhost:8000";
     private static final String TABLENAME = "Flightdata";
 
     private AmazonDynamoDBClient client;
@@ -31,9 +31,9 @@ public class FlightMapper {
     private DynamoDBMapper mapper;
 
     public FlightMapper() {
-        client = new AmazonDynamoDBClient(new BasicAWSCredentials("Fake", "Fake"));
-        //client = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderChain());
-        client.setEndpoint(ENDPOINT);
+        //client = new AmazonDynamoDBClient(new BasicAWSCredentials("Fake", "Fake"));
+        client = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderChain());
+        //client.setEndpoint(ENDPOINT);
         dynamoDB = new DynamoDB(client);
         mapper = new DynamoDBMapper(client);
         if (client.listTables().getTableNames().contains(TABLENAME)) {
