@@ -6,9 +6,17 @@ before_install:
   - chmod +x gradlew
 
 deploy:
-  provider: releases
-  api_key: "$OAUTH_TOKEN"
-  file: "build/libs/flightdemo-1.0-SNAPSHOT.jar"
+  provider: s3
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key: "$AWS_SECRET_KEY"
+  bucket: "fhb-flight"
   skip_cleanup: true
-  on:
-    tags: true
+  local_dir: build
+
+#deploy:
+#  provider: releases
+#  api_key: "$OAUTH_TOKEN"
+#  file: "build/libs/flightdemo-1.0-SNAPSHOT.jar"
+#  skip_cleanup: true
+#  on:
+#    tags: true
