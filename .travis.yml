@@ -1,17 +1,22 @@
 language: java
 jdk:
   - oraclejdk8
-
+services:
+  - docker
 before_install:
   - chmod +x gradlew
+after_success:
+  - docker build -t cronjoe/flightradar .
+  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker push cronjoe/flightradar
 
-deploy:
-  provider: s3
-  access_key_id: "$AWS_ACCESS_KEY"
-  secret_access_key: "$AWS_SECRET_KEY"
-  bucket: "fhb-flight"
-  skip_cleanup: true
-  local_dir: build/libs
+# deploy:
+#   provider: s3
+#   access_key_id: "$AWS_ACCESS_KEY"
+#   secret_access_key: "$AWS_SECRET_KEY"
+#   bucket: "fhb-flight"
+#   skip_cleanup: true
+#   local_dir: build/libs
 
 #deploy:
 #  provider: releases
