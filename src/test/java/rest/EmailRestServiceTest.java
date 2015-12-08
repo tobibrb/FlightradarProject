@@ -8,9 +8,9 @@ package rest;
  * Created by Notebook on 07.12.2015.
  */
 public class EmailRestServiceTest {
-   /* @Test
+    @Test
     public void sendEmailTest() {
-        assertTrue(EmailRestService.sendEmail("anderst@fh-brandenburg.de","Test","Dies ist ein Toller Test"));
+        assertTrue(EmailRestService.sendEmail("success@simulator.amazonses.com","Test","Dies ist ein Toller Test"));
     }
-    */
+
 }
