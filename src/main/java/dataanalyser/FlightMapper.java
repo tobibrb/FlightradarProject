@@ -1,7 +1,5 @@
 package dataanalyser;
 
-import com.amazonaws.auth.AWSCredentialsProviderChain;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -10,6 +8,7 @@ import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.google.gson.*;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +20,11 @@ import java.util.Set;
  */
 public class FlightMapper {
 
-    //lokale DynamoDB Installation
+    //local DynamoDB installation
     //private static final String ENDPOINT = "http://localhost:8000";
+
+    private static Logger logger = Logger.getLogger(FlightMapper.class);
+
     private static final String TABLENAME = "Flightdata";
 
     private AmazonDynamoDBClient client;
@@ -31,13 +33,15 @@ public class FlightMapper {
     private DynamoDBMapper mapper;
 
     public FlightMapper() {
+        // local DynamoDB
         //client = new AmazonDynamoDBClient(new BasicAWSCredentials("Fake", "Fake"));
-        client = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderChain());
         //client.setEndpoint(ENDPOINT);
+        // AWS DynamoDB
+        client = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderChain());
         dynamoDB = new DynamoDB(client);
         mapper = new DynamoDBMapper(client);
         if (client.listTables().getTableNames().contains(TABLENAME)) {
-            System.out.println("Table exists");
+            logger.debug("Table exists. Going to remove it.");
             client.deleteTable(TABLENAME);
         }
         CreateTableRequest request = mapper.generateCreateTableRequest(Flight.class);
@@ -46,11 +50,12 @@ public class FlightMapper {
         try {
             table.waitForActive();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Got Exception: " + e.getMessage());
         }
     }
 
     public void createFlight(Flight flight) {
+        logger.debug("Saving Flight: " + flight);
         mapper.save(flight);
     }
 
@@ -87,7 +92,7 @@ public class FlightMapper {
                         gson.fromJson(array.get(17), Long.class)    // unknown3
                 ));
             } catch (IllegalStateException e) {
-                System.out.println("INFO: No Array");
+                logger.debug("JSON does not contain an Array. Ignoring...");
             }
         }
         return list;
