@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
+
 /**
  * Created by Notebook on 07.12.2015.
  */
@@ -24,7 +26,15 @@ public class EmailRestService {
     final static String FROM = "toni.p.anders@gmail.com";
     @RequestMapping("/flight-radar/sub-email/")
     private void subscribeEmail(@RequestParam(value="email") String email, @RequestParam(value="flughafen") String flughafen){
+        File emailListXml = S3Service.getFromS3("emailList.xlm");
+        File emailXml = S3Service.getFromS3("email.xml");
+        if (emailListXml != null){
 
+        }
+        else if (emailXml != null){
+            EmailVO emailDaten = XmlService.readEmailXml(emailXml);
+
+        }
 
         //TODO E-Mail registration
     }
