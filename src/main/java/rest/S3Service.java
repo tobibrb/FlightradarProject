@@ -1,7 +1,6 @@
 package rest;
 
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -24,20 +23,21 @@ public class S3Service {
 
     final static Logger logger = Logger.getLogger(S3Service.class);
 
-    private AmazonS3 s3Client;
-    private String bucketName;
+    private static AmazonS3 s3Client;
+    private static String bucketName;
 
 
     public S3Service(){
         this.s3Client = new AmazonS3Client(new ProfileCredentialsProvider("email"));
+        this.bucketName = "flightradarbucket";
     }
 
-    public boolean putToS3(File file){
+    protected static boolean putToS3(File file){
         boolean isUploadSuccess=false;
 
         try {
-            this.s3Client.putObject(new PutObjectRequest(
-                    this.bucketName, file.getName(), file));
+            s3Client.putObject(new PutObjectRequest(
+                    bucketName, file.getName(), file));
             isUploadSuccess=true;
         } catch (AmazonClientException e) {
             logger.error(e.getMessage());
@@ -45,11 +45,11 @@ public class S3Service {
         return isUploadSuccess;
     }
 
-    public File getFromS3(String keyName){
+    protected static File getFromS3(String keyName){
         S3Object object;
         File file = new File("EmailList");
         try {
-            object = this.s3Client.getObject(new GetObjectRequest(this.bucketName, keyName));
+            object = s3Client.getObject(new GetObjectRequest(bucketName, keyName));
             IOUtils.copy(object.getObjectContent(), new FileOutputStream(file));
         } catch (AmazonClientException e) {
            logger.error(e.getMessage());
@@ -60,10 +60,10 @@ public class S3Service {
         }
         return file;
     }
-    public boolean deleteFromS3(String keyName){
+    protected static boolean deleteFromS3(String keyName){
         boolean isDeleteSuccess= false;
         try {
-            this.s3Client.deleteObject(new DeleteObjectRequest(this.bucketName, keyName));
+            s3Client.deleteObject(new DeleteObjectRequest(bucketName, keyName));
             isDeleteSuccess=true;
         } catch (AmazonClientException e) {
             logger.error(e.getMessage());
