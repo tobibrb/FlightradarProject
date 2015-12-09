@@ -1,6 +1,7 @@
 package dataanalyser;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
@@ -37,20 +38,22 @@ public class FlightMapper {
         //client = new AmazonDynamoDBClient(new BasicAWSCredentials("Fake", "Fake"));
         //client.setEndpoint(ENDPOINT);
         // AWS DynamoDB
-        client = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderChain());
+        client = new AmazonDynamoDBClient(new ProfileCredentialsProvider("dynamodb"));
         dynamoDB = new DynamoDB(client);
         mapper = new DynamoDBMapper(client);
-        if (client.listTables().getTableNames().contains(TABLENAME)) {
+        /*if (client.listTables().getTableNames().contains(TABLENAME)) {
             logger.debug("Table exists. Going to remove it.");
             client.deleteTable(TABLENAME);
-        }
-        CreateTableRequest request = mapper.generateCreateTableRequest(Flight.class);
-        request.setProvisionedThroughput(new ProvisionedThroughput(10L, 5L));
-        table = dynamoDB.createTable(request);
-        try {
-            table.waitForActive();
-        } catch (Exception e) {
-            logger.error("Got Exception: " + e.getMessage());
+        }*/
+        if (!client.listTables().getTableNames().contains(TABLENAME)) {
+            CreateTableRequest request = mapper.generateCreateTableRequest(Flight.class);
+            request.setProvisionedThroughput(new ProvisionedThroughput(10L, 5L));
+            table = dynamoDB.createTable(request);
+            try {
+                table.waitForActive();
+            } catch (Exception e) {
+                logger.error("Got Exception: " + e.getMessage());
+            }
         }
     }
 
