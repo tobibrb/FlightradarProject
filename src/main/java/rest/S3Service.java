@@ -26,7 +26,7 @@ public class S3Service {
 
     private AmazonS3 s3Client;
     private String bucketName;
-    private String keyName;
+
 
     public S3Service(){
         this.s3Client = new AmazonS3Client(new ProfileCredentialsProvider("email"));
@@ -37,7 +37,7 @@ public class S3Service {
 
         try {
             this.s3Client.putObject(new PutObjectRequest(
-                    bucketName, keyName, file));
+                    this.bucketName, file.getName(), file));
             isUploadSuccess=true;
         } catch (AmazonClientException e) {
             logger.error(e.getMessage());
@@ -45,11 +45,11 @@ public class S3Service {
         return isUploadSuccess;
     }
 
-    public File getFromS3(String fileName){
+    public File getFromS3(String keyName){
         S3Object object;
-        File file = new File(fileName);
+        File file = new File("EmailList");
         try {
-            object = this.s3Client.getObject(new GetObjectRequest(this.bucketName, this.keyName));
+            object = this.s3Client.getObject(new GetObjectRequest(this.bucketName, keyName));
             IOUtils.copy(object.getObjectContent(), new FileOutputStream(file));
         } catch (AmazonClientException e) {
            logger.error(e.getMessage());
@@ -60,10 +60,10 @@ public class S3Service {
         }
         return file;
     }
-    public boolean deleteFromS3(File file){
+    public boolean deleteFromS3(String keyName){
         boolean isDeleteSuccess= false;
         try {
-            this.s3Client.deleteObject(new DeleteObjectRequest(this.bucketName, this.keyName));
+            this.s3Client.deleteObject(new DeleteObjectRequest(this.bucketName, keyName));
             isDeleteSuccess=true;
         } catch (AmazonClientException e) {
             logger.error(e.getMessage());
