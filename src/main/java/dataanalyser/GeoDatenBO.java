@@ -2,6 +2,8 @@ package dataanalyser;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -12,6 +14,7 @@ import java.nio.charset.Charset;
  * Created by Notebook on 03.12.2015.
  */
 public class GeoDatenBO {
+    private static Logger logger = Logger.getLogger(GeoDatenBO.class);
     static String USERNAME = "anderst";
 
     public static boolean isFlightOverBrandenburg(Flight flight) {
@@ -29,11 +32,15 @@ public class GeoDatenBO {
     static boolean checkWithGeoNames(float latitude, float longitude, String searchedRegion) {
         boolean isOverRegion = false;
         String jsonString = getGeoNamesPerRest(latitude, longitude);
-        String regionName;
+        String regionName = "";
         Gson gson = new Gson();
 
         JsonObject object = gson.fromJson(jsonString, JsonObject.class);
-        regionName = gson.fromJson(object.get("adminName1"), String.class);
+        try {
+            regionName = gson.fromJson(object.get("adminName1"), String.class);
+        } catch (NullPointerException e) {
+            logger.error("Fehler in Geodaten API: " + e.getMessage());
+        }
 
         if (searchedRegion.compareTo(regionName)==0) isOverRegion = true;
         return isOverRegion;
