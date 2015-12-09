@@ -2,6 +2,7 @@ package rest;
 
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
@@ -45,7 +46,7 @@ public class EmailRestService {
 
 
         try {
-            AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(new DefaultAWSCredentialsProviderChain());
+            AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(new ProfileCredentialsProvider("email"));
             Region REGION = Region.getRegion(Regions.US_EAST_1);
             client.setRegion(REGION);
 
