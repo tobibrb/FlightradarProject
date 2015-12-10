@@ -27,8 +27,8 @@ public class Flight {
     private String start;
     private String destination;
     private String flightNumber;
-    private Long unknown1;
-    private Long unknown2;
+    private Long unknown1; // gelandet ? 1 = ja : 0 = nein
+    private Long unknown2; // steigrate
     private String callsign;
     private Long unknown3;
 
