@@ -2,7 +2,7 @@ group 'de.fhb'
 version '1.0-SNAPSHOT'
 buildscript {
     ext {
-        springBootVersion = '1.2.7.RELEASE'
+        springBootVersion = '1.3.0.RELEASE'
     }
     repositories {
         mavenCentral()
