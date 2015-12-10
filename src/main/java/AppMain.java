@@ -52,15 +52,16 @@ public class AppMain {
     public static void main(String[] args) throws Exception {
         Timer timer = new Timer();
         flightBo = new FlightBo();
-        /* --------------------------------------------------------
-         * TEST: Holen und Speichern
-         * --------------------------------------------------------
-         */
         /* ----------------------------------------------
          * Spring App starten
          * ----------------------------------------------
          */
         SpringApplication.run(AppMain.class, args);
+
+        /* ----------------------------------------------
+         * Timer starten
+         * ----------------------------------------------
+         */
         timer.scheduleAtFixedRate(new UpdateFlightsTimerTask(), 1000, 30 * 60 * 1000);
     }
 /*
