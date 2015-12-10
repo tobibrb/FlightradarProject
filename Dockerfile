@@ -7,7 +7,7 @@ RUN apt-get update
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 RUN apt-get install oracle-java8-installer -y
 RUN apt-get install oracle-java8-set-default -y
-ADD build/libs/credentials /credentials
+ADD credentials /credentials
 ENV AWS_CREDENTIAL_PROFILES_FILE /credentials
 ADD build/libs/flightdemo-1.0-SNAPSHOT.jar /service.jar
 ENTRYPOINT java -jar /service.jar
