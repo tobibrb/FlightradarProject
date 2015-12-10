@@ -6,10 +6,12 @@ services:
 before_install:
   - chmod +x gradlew
   - mkdir .aws
-  - echo -e "[dynamodb]\naws_access_key_id = $AWS_ACCESS_KEY\naws_secret_access_key = $AWS_SECRET_KEY" > $(dirname $0)/.aws/credentials
-  - echo -e "[email]\naws_access_key_id = $AWS_MAIL_ACCESS_KEY\naws_secret_access_key = $AWS_MAIL_SECRET_KEY" >> $(dirname $0)/.aws/credentials
-  - export AWS_CREDENTIAL_PROFILES_FILE=$(dirname $0)/.aws/credentials
+  - echo -e "[dynamodb]\naws_access_key_id = $AWS_ACCESS_KEY\naws_secret_access_key = $AWS_SECRET_KEY" > $(dirname $0)/credentials
+  - echo -e "[email]\naws_access_key_id = $AWS_MAIL_ACCESS_KEY\naws_secret_access_key = $AWS_MAIL_SECRET_KEY" >> $(dirname $0)/credentials
+  - export AWS_CREDENTIAL_PROFILES_FILE=$(dirname $0)/credentials
 after_success:
+  - echo -e "[dynamodb]\naws_access_key_id = $AWS_ACCESS_KEY\naws_secret_access_key = $AWS_SECRET_KEY" > build/libs/credentials
+  - echo -e "[email]\naws_access_key_id = $AWS_MAIL_ACCESS_KEY\naws_secret_access_key = $AWS_MAIL_SECRET_KEY" >> build/libs/credentials
   - docker build -t cronjoe/flightradar .
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker push cronjoe/flightradar
