@@ -38,30 +38,27 @@ public class GeoDatenBO {
         JsonObject object = gson.fromJson(jsonString, JsonObject.class);
         try {
             regionName = gson.fromJson(object.get("adminName1"), String.class);
+            if (searchedRegion.compareTo(regionName) == 0) {
+                isOverRegion = true;
+            }
         } catch (NullPointerException e) {
             logger.error("Fehler in Geodaten API: " + e.getMessage());
         }
-
-        if (searchedRegion.compareTo(regionName)==0) isOverRegion = true;
         return isOverRegion;
     }
 
     private static String getGeoNamesPerRest(float latitude, float longitude) {
-        String response="";
+        String response = "";
         String url = "http://api.geonames.org/countrySubdivisionJSON?formatted=true&lat=" + latitude + "&lng=" + longitude + "&username=" + USERNAME;
         System.out.println(url);
 
         InputStream is = null;
         try {
-            is = new URL(url).openStream();
+                is = new URL(url).openStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             response = readAll(rd);
-
-           } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
-
+            logger.error("Got exception: " + e.getMessage());
         } finally {
             try {
                 if (is != null)
@@ -70,7 +67,7 @@ public class GeoDatenBO {
                 e.printStackTrace();
             }
         }
-    return response;
+        return response;
     }
 
     private static String readAll(Reader rd) throws IOException {
