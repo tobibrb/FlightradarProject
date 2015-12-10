@@ -5,7 +5,6 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.*;
 import org.apache.log4j.Logger;
 
@@ -14,16 +13,16 @@ import java.util.List;
 /**
  * Created by Bartz, Tobias @Tobi-PC on 03.12.2015 at 14:56.
  */
-public class FlightMapper extends AFlightMapper {
+public class FlightBo extends AFlightBo {
 
     //local DynamoDB installation
     //private static final String ENDPOINT = "http://localhost:8000";
 
-    private static Logger logger = Logger.getLogger(FlightMapper.class);
+    private static Logger logger = Logger.getLogger(FlightBo.class);
 
     protected static final String TABLENAME = "Flightdata";
 
-    public FlightMapper() {
+    public FlightBo() {
         // local DynamoDB
         //client = new AmazonDynamoDBClient(new BasicAWSCredentials("Fake", "Fake"));
         //client.setEndpoint(ENDPOINT);

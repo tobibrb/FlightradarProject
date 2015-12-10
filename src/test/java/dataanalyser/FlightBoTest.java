@@ -2,9 +2,6 @@ package dataanalyser;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static junit.framework.TestCase.assertTrue;
 
 /**
@@ -28,6 +25,6 @@ public class FlightBoTest {
 
     @Test
     public void parseFlightsFromJsonTest() {
-        assertTrue(FlightMapper.parseFlightsFromJson(jsonString).size() == 11);
+        assertTrue(FlightBo.parseFlightsFromJson(jsonString).size() == 11);
     }
 }

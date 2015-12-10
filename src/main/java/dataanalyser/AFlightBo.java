@@ -18,16 +18,16 @@ import java.util.Set;
 /**
  * Created by Tobi on 10.12.2015.
  */
-public abstract class AFlightMapper {
+public abstract class AFlightBo {
 
-    protected static Logger logger = Logger.getLogger(AFlightMapper.class);
+    protected static Logger logger = Logger.getLogger(AFlightBo.class);
 
     protected AmazonDynamoDBClient client;
     protected DynamoDB dynamoDB;
     protected Table table;
     protected DynamoDBMapper mapper;
 
-    public AFlightMapper() {}
+    public AFlightBo() {}
 
     public static List<Flight> parseFlightsFromJson(String jsonString) {
         List<Flight> list = new ArrayList<>();

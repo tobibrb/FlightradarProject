@@ -16,7 +16,7 @@ import static junit.framework.TestCase.assertTrue;
 /**
  * Created by Tobi on 10.12.2015.
  */
-public class FlightMapperIT {
+public class FlightBoIT {
 
     private static AlternatorDBClientV2 client;
     private static DynamoDBMapper mapper;
@@ -41,8 +41,8 @@ public class FlightMapperIT {
 
     @Test
     public void createFlightsIntegrationTest(){
-        MapperMock mapperMock = new MapperMock();
-        List<Flight> flights = MapperMock.parseFlightsFromJson(FlightBoTest.jsonString);
+        FlightBoMock mapperMock = new FlightBoMock();
+        List<Flight> flights = FlightBoMock.parseFlightsFromJson(FlightBoTest.jsonString);
         assertTrue(flights.size() == 11);
         for (Flight flight : flights) {
             mapperMock.createFlight(flight);
@@ -50,10 +50,10 @@ public class FlightMapperIT {
         assertTrue(mapperMock.findAll().size() == 11);
     }
 
-    private static class MapperMock extends FlightMapper {
+    private static class FlightBoMock extends FlightBo {
 
-        public MapperMock() {
-            this.mapper = FlightMapperIT.mapper;
+        public FlightBoMock() {
+            this.mapper = FlightBoIT.mapper;
         }
     }
 }

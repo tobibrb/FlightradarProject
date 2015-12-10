@@ -1,5 +1,5 @@
 import dataanalyser.Flight;
-import dataanalyser.FlightMapper;
+import dataanalyser.FlightBo;
 import dataanalyser.GeoDatenBO;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -20,7 +20,7 @@ import java.util.List;
 @Controller
 @EnableAutoConfiguration
 public class AppMain {
-    private static FlightMapper mapper;
+    private static FlightBo flightBo;
 
     private static final String APIURL = "http://krk.data.fr24.com/zones/fcgi/feed.json?array=0&bounds=54.0,50.0,10.0,15.0";
     // private static final String APIURL = "http://data.flightradar24.com/zones/fcgi/full.json";
@@ -35,7 +35,7 @@ public class AppMain {
          * ---------------------------------------------------------
          */
 
-        List<Flight> flights = mapper.findAll();
+        List<Flight> flights = flightBo.findAll();
         StringBuilder builder = new StringBuilder();
         builder.append("Anzahl: ");
         builder.append(flights.size());
@@ -65,11 +65,11 @@ public class AppMain {
             stringBuilder.append(inputLine);
         in.close();
         String jsonString = stringBuilder.toString();
-        List<Flight> flights = FlightMapper.parseFlightsFromJson(jsonString);
-        mapper = new FlightMapper();
+        List<Flight> flights = FlightBo.parseFlightsFromJson(jsonString);
+        flightBo = new FlightBo();
         for (Flight flight : flights) {
             if (GeoDatenBO.isFlightOverBrandenburg(flight)) {
-                mapper.createFlight(flight);
+                flightBo.createFlight(flight);
             }
         }
 
