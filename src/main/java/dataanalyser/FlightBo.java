@@ -23,6 +23,7 @@ public class FlightBo extends AFlightBo {
     protected static final String TABLENAME = "Flightdata";
 
     public FlightBo() {
+        logger.debug("Connecting to DynamoDB");
         // local DynamoDB
         //client = new AmazonDynamoDBClient(new BasicAWSCredentials("Fake", "Fake"));
         //client.setEndpoint(ENDPOINT);
@@ -30,11 +31,13 @@ public class FlightBo extends AFlightBo {
         client = new AmazonDynamoDBClient(new ProfileCredentialsProvider("dynamodb"));
         dynamoDB = new DynamoDB(client);
         mapper = new DynamoDBMapper(client);
+        logger.debug("Successfully connected to DynamoDB");
         /*if (client.listTables().getTableNames().contains(TABLENAME)) {
             logger.debug("Table exists. Going to remove it.");
             client.deleteTable(TABLENAME);
         }*/
         if (!client.listTables().getTableNames().contains(TABLENAME)) {
+            logger.debug("Table does not exist. Creating...");
             CreateTableRequest request = mapper.generateCreateTableRequest(Flight.class);
             request.setProvisionedThroughput(new ProvisionedThroughput(10L, 5L));
             table = dynamoDB.createTable(request);
@@ -52,6 +55,7 @@ public class FlightBo extends AFlightBo {
     }
 
     public List<Flight> findAll() {
+        logger.debug("Querying data from table " + TABLENAME);
         return mapper.scan(Flight.class, new DynamoDBScanExpression());
     }
 

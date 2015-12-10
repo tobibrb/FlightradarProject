@@ -50,7 +50,7 @@ public class GeoDatenBO {
     private static String getGeoNamesPerRest(float latitude, float longitude) {
         String response = "";
         String url = "http://api.geonames.org/countrySubdivisionJSON?formatted=true&lat=" + latitude + "&lng=" + longitude + "&username=" + USERNAME;
-        System.out.println(url);
+        logger.debug("Calling API: " + url);
 
         InputStream is = null;
         try {
@@ -64,7 +64,7 @@ public class GeoDatenBO {
                 if (is != null)
                     is.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Got Exception: " + e.getMessage());
             }
         }
         return response;
