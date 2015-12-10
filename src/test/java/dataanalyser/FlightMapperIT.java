@@ -48,7 +48,6 @@ public class FlightMapperIT {
             mapperMock.createFlight(flight);
         }
         assertTrue(mapperMock.findAll().size() == 11);
-        assertTrue(true);
     }
 
     private static class MapperMock extends FlightMapper {
