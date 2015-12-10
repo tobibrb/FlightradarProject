@@ -2,6 +2,9 @@ package dataanalyser;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static junit.framework.TestCase.assertTrue;
 
 /**
@@ -9,7 +12,7 @@ import static junit.framework.TestCase.assertTrue;
  */
 public class FlightBoTest {
 
-    private String jsonString = "{\"full_count\":11178,\"version\":4," +
+    protected static String jsonString = "{\"full_count\":11178,\"version\":4," +
             "\"827d225\":[\"\",2.3962,-46.9981,311,45000,366,\"0000\",\"F-SBBE3\",\"E55P\",\"\",1449150155,\"\",\"\",\"\",0,0,\"E55P\",0]\n" +
             ",\"827ecf1\":[\"\",7.1661,-79.3709,173,45000,440,\"1402\",\"F-MPEJ1\",\"CL30\",\"\",1449150152,\"\",\"\",\"\",0,-128,\"CL30\",0]\n" +
             ",\"8280888\":[\"\",36.7235,-86.7582,249,45000,380,\"3602\",\"T-KCKV1\",\"LJ45\",\"\",1449150154,\"\",\"\",\"\",0,-128,\"LJ45\",0]\n" +
@@ -24,7 +27,7 @@ public class FlightBoTest {
             "}";
 
     @Test
-    public void test() {
+    public void parseFlightsFromJsonTest() {
         assertTrue(FlightMapper.parseFlightsFromJson(jsonString).size() == 11);
     }
 }
