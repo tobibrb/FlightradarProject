@@ -66,7 +66,6 @@ public class UpdateFlightsTimerTask extends TimerTask {
             List<Flight> flightsOverBrandenburg = new ArrayList<>();
             for (Flight flight : flights) {
                 if (GeoDatenBO.isFlightOverBrandenburg(flight)) {
-                    // In Datenbank schreiben
                     flightsOverBrandenburg.add(flight);
                 }
             }
