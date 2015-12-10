@@ -9,6 +9,8 @@ import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.model.*;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,6 +72,11 @@ public class FlightBo extends AFlightBo {
         mapper.save(flight);
     }
 
+    public void createFlights(List<Flight> flights) {
+        logger.debug("Writing " + flights.size() + " Flights");
+        mapper.batchSave(flights);
+    }
+
     /**
      * Alle Daten aus Datenbank holen
      *
@@ -78,5 +85,20 @@ public class FlightBo extends AFlightBo {
     public List<Flight> findAll() {
         logger.debug("Querying data from table " + TABLENAME);
         return mapper.scan(Flight.class, new DynamoDBScanExpression());
+    }
+
+    /**
+     * Alle Flugdaten, die älter als 60 Minuten sind löschen
+     */
+    public void deleteOldFlights() {
+        List<Flight> flights = mapper.scan(Flight.class, new DynamoDBScanExpression());
+        List<Flight> oldFlights = new ArrayList<>();
+        for (Flight flight : flights) {
+            if (flight.getTimestamp() * 1000 < new Date().getTime() - 60 * 60 * 1000) {
+                logger.debug("Adding Flight to delete request: " + flight);
+                oldFlights.add(flight);
+            }
+        }
+        mapper.batchDelete(oldFlights);
     }
 }

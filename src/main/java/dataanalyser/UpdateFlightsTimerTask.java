@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
@@ -57,12 +58,22 @@ public class UpdateFlightsTimerTask extends TimerTask {
 
             // Flüge aus JSON String parsen
             List<Flight> flights = FlightBo.parseFlightsFromJson(jsonString);
+
+            // alte Flüge löschen
+            flightBo.deleteOldFlights();
+
+            // prüfen ob Flüge über Berlin/Brandenburg
+            List<Flight> flightsOverBrandenburg = new ArrayList<>();
             for (Flight flight : flights) {
                 if (GeoDatenBO.isFlightOverBrandenburg(flight)) {
                     // In Datenbank schreiben
-                    flightBo.createFlight(flight);
+                    flightsOverBrandenburg.add(flight);
                 }
             }
+            // Flüge speichern
+            flightBo.createFlights(flightsOverBrandenburg);
+
+
         } catch (IOException e) {
             logger.error("Got Exception: " + e.getMessage());
         }
