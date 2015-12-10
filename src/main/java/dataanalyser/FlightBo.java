@@ -2,6 +2,7 @@ package dataanalyser;
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDeleteExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -11,31 +12,41 @@ import org.apache.log4j.Logger;
 import java.util.List;
 
 /**
+ * FlightBo zum Schreiben und Lesen der Flüge aus der Datenbank.
+ * <p/>
  * Created by Bartz, Tobias @Tobi-PC on 03.12.2015 at 14:56.
+ *
+ * @author Tobias Bartz
  */
 public class FlightBo extends AFlightBo {
 
-    //local DynamoDB installation
-    //private static final String ENDPOINT = "http://localhost:8000";
-
+    /* Endpoint für lokale DynamoDB
+    private static final String ENDPOINT = "http://localhost:8000";
+    */
     private static Logger logger = Logger.getLogger(FlightBo.class);
 
     protected static final String TABLENAME = "Flightdata";
 
+    /**
+     * Default Konstruktor.
+     * <p/>
+     * Erstellt das DynamoDB Table bei AWS falls es nicht existiert.
+     */
     public FlightBo() {
         logger.debug("Connecting to DynamoDB");
-        // local DynamoDB
-        //client = new AmazonDynamoDBClient(new BasicAWSCredentials("Fake", "Fake"));
-        //client.setEndpoint(ENDPOINT);
+
+        /* Für lokale DynamoDB
+        client = new AmazonDynamoDBClient(new BasicAWSCredentials("Fake", "Fake"));
+        client.setEndpoint(ENDPOINT);
+        */
+
         // AWS DynamoDB
         client = new AmazonDynamoDBClient(new ProfileCredentialsProvider("dynamodb"));
         dynamoDB = new DynamoDB(client);
         mapper = new DynamoDBMapper(client);
         logger.debug("Successfully connected to DynamoDB");
-        /*if (client.listTables().getTableNames().contains(TABLENAME)) {
-            logger.debug("Table exists. Going to remove it.");
-            client.deleteTable(TABLENAME);
-        }*/
+
+        // Falls Table nicht existiert -> erstellen
         if (!client.listTables().getTableNames().contains(TABLENAME)) {
             logger.debug("Table does not exist. Creating...");
             CreateTableRequest request = mapper.generateCreateTableRequest(Flight.class);
@@ -49,14 +60,23 @@ public class FlightBo extends AFlightBo {
         }
     }
 
+    /**
+     * Flugdaten in Datenbank speichern
+     *
+     * @param flight Flugdaten die gespeichert werden sollen
+     */
     public void createFlight(Flight flight) {
         logger.debug("Saving Flight: " + flight);
         mapper.save(flight);
     }
 
+    /**
+     * Alle Daten aus Datenbank holen
+     *
+     * @return Liste aller Flugdaten
+     */
     public List<Flight> findAll() {
         logger.debug("Querying data from table " + TABLENAME);
         return mapper.scan(Flight.class, new DynamoDBScanExpression());
     }
-
 }
