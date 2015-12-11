@@ -1,7 +1,4 @@
-import dataanalyser.Flight;
-import dataanalyser.FlightBo;
-import dataanalyser.GeoDatenBO;
-import dataanalyser.UpdateFlightsTimerTask;
+import dataanalyser.*;
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -24,7 +21,7 @@ import java.util.Timer;
 @Controller
 @EnableAutoConfiguration
 public class AppMain {
-    private static FlightBo flightBo;
+    private static AFlightBo flightBo;
 
 
 

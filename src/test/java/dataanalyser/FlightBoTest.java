@@ -25,6 +25,6 @@ public class FlightBoTest {
 
     @Test
     public void parseFlightsFromJsonTest() {
-        assertTrue(FlightBo.parseFlightsFromJson(jsonString).size() == 11);
+        assertTrue(AFlightBo.parseFlightsFromJson(jsonString).size() == 11);
     }
 }

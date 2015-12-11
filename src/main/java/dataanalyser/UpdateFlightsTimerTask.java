@@ -28,7 +28,7 @@ public class UpdateFlightsTimerTask extends TimerTask {
     // User-Agent zum Faken eines Browsers
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11";
 
-    private static FlightBo flightBo = new FlightBo();
+    private static AFlightBo flightBo = new FlightBo();
     private static Logger logger = Logger.getLogger(UpdateFlightsTimerTask.class);
 
     /**

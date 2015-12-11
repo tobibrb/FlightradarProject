@@ -78,4 +78,8 @@ public abstract class AFlightBo {
     public abstract List<Flight> findAll();
 
     public abstract void createFlight(Flight flight);
+
+    public abstract void createFlights(List<Flight> flights);
+
+    public abstract void deleteOldFlights();
 }
