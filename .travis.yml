@@ -5,7 +5,6 @@ services:
   - docker
 before_install:
   - chmod +x gradlew
-  - mkdir .aws
   - echo -e "[dynamodb]\naws_access_key_id = $AWS_ACCESS_KEY\naws_secret_access_key = $AWS_SECRET_KEY" > $(dirname $0)/credentials
   - echo -e "[email]\naws_access_key_id = $AWS_MAIL_ACCESS_KEY\naws_secret_access_key = $AWS_MAIL_SECRET_KEY" >> $(dirname $0)/credentials
   - export AWS_CREDENTIAL_PROFILES_FILE=$(dirname $0)/credentials
