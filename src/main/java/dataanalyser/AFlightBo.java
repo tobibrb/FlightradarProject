@@ -16,6 +16,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Abstrakte Klasse des FlightBo.
+ * <p/>
+ * Macht eine spätere Änderung der Datenbank einfacher
+ * <p/>
  * Created by Tobi on 10.12.2015.
  */
 public abstract class AFlightBo {
@@ -27,8 +31,15 @@ public abstract class AFlightBo {
     protected Table table;
     protected DynamoDBMapper mapper;
 
-    public AFlightBo() {}
+    public AFlightBo() {
+    }
 
+    /**
+     * Statische Methode zum parsen von Flugdaten aus JSON Strings
+     *
+     * @param jsonString der geparst werden soll
+     * @return Liste von Flugdaten
+     */
     public static List<Flight> parseFlightsFromJson(String jsonString) {
         List<Flight> list = new ArrayList<>();
         Gson gson = new Gson();
@@ -65,5 +76,6 @@ public abstract class AFlightBo {
     }
 
     public abstract List<Flight> findAll();
+
     public abstract void createFlight(Flight flight);
 }
