@@ -44,9 +44,7 @@ public class FlightBoIT {
         FlightBoMock mapperMock = new FlightBoMock();
         List<Flight> flights = FlightBoMock.parseFlightsFromJson(FlightBoTest.jsonString);
         assertTrue(flights.size() == 11);
-        for (Flight flight : flights) {
-            mapperMock.createFlight(flight);
-        }
+        mapperMock.createFlights(flights);
         assertTrue(mapperMock.findAll().size() == 11);
     }
 
