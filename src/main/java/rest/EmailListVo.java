@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Notebook on 09.12.2015.
  */
 @XmlRootElement
-public class EmailListVo {
+public class EmailListVo extends AEmail {
 
     private List<EmailVO> emails;
 

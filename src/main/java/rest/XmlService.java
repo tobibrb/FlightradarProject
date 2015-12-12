@@ -14,10 +14,10 @@ import java.io.File;
 public class XmlService {
     final static Logger logger = Logger.getLogger(XmlService.class);
 
-    public static File createEmailXml(String filename, EmailVO email){
+    public static File createEmailXml(String filename, AEmail email){
         File file = new File(filename+".xml");
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(EmailVO.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(AEmail.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             jaxbMarshaller.marshal(email, file);
@@ -27,12 +27,12 @@ public class XmlService {
         return file;
     }
 
-    public static EmailVO readEmailXml(File file){
-        EmailVO email = null;
+    public static AEmail readEmailXml(File file){
+        AEmail email = null;
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(EmailVO.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(AEmail.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            email = (EmailVO) jaxbUnmarshaller.unmarshal(file);
+            email = (AEmail) jaxbUnmarshaller.unmarshal(file);
         } catch (JAXBException e) {
             logger.error(e.getMessage());
         }

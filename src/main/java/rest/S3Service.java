@@ -24,7 +24,7 @@ public class S3Service {
     final static Logger logger = Logger.getLogger(S3Service.class);
 
     private static AmazonS3 s3Client = new AmazonS3Client(new ProfileCredentialsProvider("email"));
-    private static String bucketName = "flightradarbucket";
+    private static String bucketName = "flightradaremail";
 
     protected static boolean putToS3(File file){
         boolean isUploadSuccess=false;
