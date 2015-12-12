@@ -29,7 +29,7 @@ public class EmailRestService {
 
     @RequestMapping("/flight-radar/sub-email")
     private String subscribeEmail(@RequestParam(value = "email") String email, @RequestParam(value = "flughafen") List<String> flughafen) {
-        if (!isEmailExisting(email)) {
+        if (!isEmailInListExisting(email)) {
             if (!isEmailAdressExising(email)) {
                 if (isEmailValid(email)) {
                     logger.debug("New User created");
@@ -87,7 +87,7 @@ public class EmailRestService {
 
     }
 
-    private boolean isEmailExisting(String email) {
+    private boolean isEmailInListExisting(String email) {
         boolean emailExists = false;
         EmailListVo emailList = (EmailListVo) XmlService.readEmailXml(S3Service.getFromS3("emailList.xml"));
         if (emailList != null) {
