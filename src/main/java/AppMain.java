@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import rest.EmailRestService;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -53,7 +54,7 @@ public class AppMain {
          * Spring App starten
          * ----------------------------------------------
          */
-        SpringApplication.run(AppMain.class, args);
+        SpringApplication.run(EmailRestService.class, args);
 
         /* ----------------------------------------------
          * Timer starten

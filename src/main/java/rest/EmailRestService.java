@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -30,12 +32,13 @@ public class EmailRestService {
     @RequestMapping("/flight-radar/sub-email")
     private String subscribeEmail(@RequestParam(value = "email") String email, @RequestParam(value = "flughafen") List<String> flughafen) {
         if (!isEmailInListExisting(email)) {
-            if (!isEmailAdressExising(email)) {
+
                 if (isEmailValid(email)) {
                     logger.debug("New User created");
                     EmailVO newUser = new EmailVO(email, flughafen);
-                    File file = XmlService.createEmailXml(email, newUser);
+                    File file = XmlService.createEmailXml(newUser.getUuid(), newUser);
                     S3Service.putToS3(file);
+                    file.delete();
                     logger.debug("File Uploaded to S3");
                     if (sendRegistrationMail(newUser)) {
                         logger.debug("Validation Email is send to User");
@@ -50,15 +53,67 @@ public class EmailRestService {
 
             }
 
-        }
+
         return responseOK("Your Email Adress: " + email + " is already registered.");
     }
+
+    @RequestMapping("/flight-radar/sub-email/validate")
+    private String validateEmail(@RequestParam(value = "uuid") String uuid) {
+        File file = S3Service.getFromS3(uuid + ".xml");
+        EmailVO emailVo = (EmailVO) XmlService.readEmailXml(file);
+        file.setWritable(true);
+        file.delete();
+
+        EmailListVo emailListe;
+        List<EmailVO> list;
+        File fileListe;
+
+        if (emailVo != null) {
+            fileListe = S3Service.getFromS3("emailList.xml");
+            emailListe = (EmailListVo) XmlService.readEmailXml(fileListe);
+            fileListe.delete();
+            if (emailListe != null) {
+                for (EmailVO element : emailListe.getEmails()) {
+                    if (element.getEmail().equals(emailVo.getEmail())) {
+                        element.setUuid(emailVo.getUuid());
+                        element.setAirport(emailVo.getAirport());
+                        file = XmlService.createEmailXml("emailList", emailListe);
+                        if (S3Service.putToS3(file)) {
+                            file.delete();
+                            return responseOK("The User data for the email: " + emailVo.getEmail() + " was updated. Thank you for using our service.\n\nThe A.B.C. Alert Team");
+                        } else {
+                            file.delete();
+                            return responseINTERNAL_SERVER_ERROR("Our Server has a problem. We are sorry.");
+                        }
+                    }
+                }
+                list = emailListe.getEmails();
+                list.add(emailVo);
+                emailListe.setEmails(list);
+            } else {
+                emailListe = new EmailListVo();
+                list = new ArrayList<>();
+                list.add(emailVo);
+                emailListe.setEmails(list);
+            }
+            file = XmlService.createEmailXml("emailList", emailListe);
+            if (S3Service.putToS3(file)) {
+                file.delete();
+                return responseOK("Your email is successful registered on our Server. Thank you for using our service.\n\nThe A.B.C. Alert Team");
+            } else {
+                file.delete();
+                return responseINTERNAL_SERVER_ERROR("Our Server has a problem. We are sorry.");
+            }
+        }
+        return responseINTERNAL_SERVER_ERROR("Sorry. Your Email is not registered by our Service. Please register your Email address again.");
+
+    }
+
 
     private void unSubscribeEmail() {
         // TODO E-Mail unregister
     }
 
-    //TODO email reg mit Ziel Flughafen
 
     protected static boolean sendEmail(String destinationName, String subjectContent, String bobyContent) {
         boolean sendEmail = false;
@@ -89,7 +144,11 @@ public class EmailRestService {
 
     private boolean isEmailInListExisting(String email) {
         boolean emailExists = false;
-        EmailListVo emailList = (EmailListVo) XmlService.readEmailXml(S3Service.getFromS3("emailList.xml"));
+        //TODO delete File from Server
+        File file = S3Service.getFromS3("emailList.xml");
+        EmailListVo emailList = (EmailListVo) XmlService.readEmailXml(file);
+
+        file.delete();
         if (emailList != null) {
             for (EmailVO element : emailList.getEmails()) {
                 if (element.getEmail().equals(email)) {
@@ -114,13 +173,12 @@ public class EmailRestService {
     private static boolean isEmailAdressExising(String email) {
         boolean isEmailExists = false;
         EmailVO emailvo = (EmailVO) XmlService.readEmailXml(S3Service.getFromS3(email + ".xml"));
-        if (emailvo!=null) {
+        if (emailvo != null) {
             if (emailvo.getEmail().equals(email)) {
                 isEmailExists = true;
             }
         }
-        return isEmailExists;
-    }
+        return isEmailExists;    }
 
     private static boolean sendRegistrationMail(EmailVO user) {
         String subjectContent = "Flight Radar Webservice Email validation";
@@ -128,7 +186,7 @@ public class EmailRestService {
         try {
             bodyContent = "Dear User,\n please validate your Email-Address (" + user.getEmail() + ") " +
                     "by clicking the Link below:\n" + Inet4Address.getLocalHost().getHostName() +
-                    ":8080/flight-radar/sub-email/validate/?uuid=" + user.getUuid() +
+                    ":8080/flight-radar/sub-email/validate?uuid=" + user.getUuid() +
                     " \n\nSpecial Thanks fom the A.B.C. Arlert Team for using our Service.";
         } catch (UnknownHostException e) {
             logger.error(e.getMessage());

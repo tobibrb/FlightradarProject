@@ -41,11 +41,11 @@ public class S3Service {
 
     protected static File getFromS3(String keyName){
         S3Object object;
-        File file = new File("EmailList");
+        File file = new File(keyName);
         try {
             object = s3Client.getObject(new GetObjectRequest(bucketName, keyName));
             IOUtils.copy(object.getObjectContent(), new FileOutputStream(file));
-        } catch (AmazonClientException e) {
+                    } catch (AmazonClientException e) {
            logger.error(e.getMessage());
         } catch (FileNotFoundException e) {
            logger.error(e.getMessage());

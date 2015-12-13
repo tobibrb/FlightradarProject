@@ -18,7 +18,7 @@ import static junit.framework.TestCase.assertTrue;
  * Created by Notebook on 12.12.2015.
  */
 public class S3ServiveIT {
-    private static EmailListVo  list;
+    private static EmailListVo list;
     private static EmailVO first;
     private static EmailVO second;
     private static EmailVO third;
@@ -33,9 +33,9 @@ public class S3ServiveIT {
         list2.add("TXL");
         list2.add("SHF");
 
-        first = new EmailVO("first@test.de",null);
-        second = new EmailVO("second@test.de",list1);
-        third = new EmailVO("third@test.de",list2);
+        first = new EmailVO("first@test.de", null);
+        second = new EmailVO("second@test.de", list1);
+        third = new EmailVO("third@test.de", list2);
         List<EmailVO> emailListe = new ArrayList<EmailVO>();
         emailListe.add(first);
         emailListe.add(second);
@@ -50,7 +50,7 @@ public class S3ServiveIT {
 
 
     @Test
-    public void putToS3Test(){
+    public void putToS3Test() {
         assertTrue(S3Service.putToS3(file));
     }
 }
