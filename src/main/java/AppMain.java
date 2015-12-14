@@ -54,7 +54,8 @@ public class AppMain {
          * Spring App starten
          * ----------------------------------------------
          */
-        SpringApplication.run(EmailRestService.class, args);
+        Object [] sources = new Object [] {EmailRestService.class, AppMain.class};
+        SpringApplication.run(sources, args);
 
         /* ----------------------------------------------
          * Timer starten

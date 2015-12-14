@@ -6,6 +6,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
+import com.sun.istack.internal.Nullable;
 import org.apache.log4j.Logger;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class EmailRestService {
     final static String FROM = "toni.p.anders@gmail.com";
 
     @RequestMapping("/flight-radar/sub-email")
-    private String subscribeEmail(@RequestParam(value = "email") String email, @RequestParam(value = "flughafen") List<String> flughafen) {
+    private String subscribeEmail(@RequestParam(value = "email") String email, @RequestParam(value = "flughafen", required = false) List<String> flughafen) {
         if (!isEmailInListExisting(email)) {
 
                 if (isEmailValid(email)) {
