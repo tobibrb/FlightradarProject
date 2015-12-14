@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.michelboudreau.alternator.AlternatorDB;
 import com.michelboudreau.alternatorv2.AlternatorDBClientV2;
 import dataanalyser.Flight;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,7 +45,7 @@ public class S3ServiveIT {
         list = new EmailListVo();
         list.setEmails(emailListe);
 
-        file = XmlService.createEmailXml("emailList", list);
+        file = XmlService.createEmailXml("Test", list);
 
     }
 
@@ -53,4 +54,6 @@ public class S3ServiveIT {
     public void putToS3Test() {
         assertTrue(S3Service.putToS3(file));
     }
+    @After
+    public void delete(){S3Service.deleteFromS3(file.getName());}
 }
