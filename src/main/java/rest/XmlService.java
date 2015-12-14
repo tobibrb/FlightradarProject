@@ -15,7 +15,7 @@ public class XmlService {
     final static Logger logger = Logger.getLogger(XmlService.class);
 
     public static File createEmailXml(String filename, AEmail email){
-        File file = new File(filename+".xml");
+        File file = new File(filename);
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(AEmail.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();

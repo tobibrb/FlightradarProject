@@ -54,6 +54,6 @@ public class S3ServiveIT {
     public void putToS3Test() {
         assertTrue(S3Service.putToS3(file));
     }
-    @After
-    public void delete(){S3Service.deleteFromS3(file.getName());}
+    @Test
+    public void deleteFromS3Test(){assertTrue(S3Service.deleteFromS3(file.getName()));}
 }
