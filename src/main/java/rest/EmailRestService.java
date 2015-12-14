@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 public class EmailRestService {
 
     final static Logger logger = Logger.getLogger(EmailRestService.class);
-    final static String FROM =  "colin.chris303@gmail.com";
+    final static String FROM =  "colin.christ303@gmail.com";
 
 
     @RequestMapping("/flight-radar/sub-email")
