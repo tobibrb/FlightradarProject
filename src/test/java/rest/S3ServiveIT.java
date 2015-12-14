@@ -46,7 +46,6 @@ public class S3ServiveIT {
         list.setEmails(emailListe);
 
         file = XmlService.createEmailXml("Test", list);
-
     }
 
 
