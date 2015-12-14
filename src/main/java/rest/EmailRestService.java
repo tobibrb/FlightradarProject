@@ -26,7 +26,8 @@ import java.util.regex.Pattern;
 public class EmailRestService {
 
     final static Logger logger = Logger.getLogger(EmailRestService.class);
-    final static String FROM = "toni.p.anders@gmail.com";
+    final static String FROM =  "colin.chris303@gmail.com";
+
 
     @RequestMapping("/flight-radar/sub-email")
     private String subscribeEmail(@RequestParam(value = "email") String email, @RequestParam(value = "flughafen", required = false) List<String> flughafen) {
@@ -79,6 +80,7 @@ public class EmailRestService {
                         file = XmlService.createEmailXml("emailList", emailListe);
                         if (S3Service.putToS3(file)) {
                             file.delete();
+                            S3Service.deleteFromS3(uuid+".xml");
                             return responseOK("The User data for the email: " + emailVo.getEmail() + " was updated. Thank you for using our service.\n\nThe A.B.C. Alert Team");
                         } else {
                             file.delete();
@@ -98,6 +100,7 @@ public class EmailRestService {
             file = XmlService.createEmailXml("emailList", emailListe);
             if (S3Service.putToS3(file)) {
                 file.delete();
+                S3Service.deleteFromS3(uuid+".xml");
                 return responseOK("Your email is successful registered on our Server. Thank you for using our service.\n\nThe A.B.C. Alert Team");
             } else {
                 file.delete();
