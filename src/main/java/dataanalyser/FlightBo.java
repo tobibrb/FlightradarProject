@@ -87,7 +87,7 @@ public class FlightBo extends AFlightBo {
     }
 
     /**
-     * Alle Flugdaten, die älter als 60 Minuten sind löschen
+     * Alle Flugdaten, die älter als 10 Minuten sind löschen
      */
     public void deleteOldFlights() {
         List<Flight> flights = mapper.scan(Flight.class, new DynamoDBScanExpression());
