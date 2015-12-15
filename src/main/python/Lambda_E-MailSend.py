@@ -1,4 +1,3 @@
-__author__ = 'Christ'
 from __future__ import print_function
 from boto3.dynamodb.conditions import Key, Attr
 import json
@@ -28,74 +27,100 @@ def lambda_handler(event,context):
         #Data bekommt einen String aus einem Stream, welcher im Body von 'response' liegt
         data = response["Body"].read();
         #root ist das element <emailListVo> man liest es aus 'data' aus.
-        #print(data)
+        print(data)
         root = ET.fromstring(data)
         #man kann auf die einezelnen Knoten zugreifen wie bei einem Mehrdimensionalen Array
         #siehe print hier bekommt man nun die Email Adresse vom ersten Element.
-        #print(root[0][0][0][0].text)
-        #print(root[0][0][0][1].text)
-        #for flughafen in root[0][0][0]:
-        #    print (flughafen.text)
-        #for adress in root.iter('email'):
-        #    print (adress.text)
 
-        #print('-----')
         for email in root[0]:
             text = ''
-            for flughafen in email[0]:
-                print('flughafen: '+flughafen.text)
+            airports = email.find('airports')
+            if airports is None:
+                adresse = email.find('email')
+                print(adresse)
                 try:
-
-                    response = table.scan(FilterExpression=Attr('Start').eq(flughafen.text))
+                    response = table.scan()
                     items = response['Items']
-
                     #print(items[0])
-
-                    text += 'Von '+flughafen.text+' startet/ist gestartet:\n'
-                    for flug in items:
-                        text += 'Flug '+flug['FlightNumber']+' nach '+flug['Destination']+'\n'
-                    #=========================================================================================
-                    text += '\n\n'
-                    response = table.scan(FilterExpression=Attr('Destination').eq(flughafen.text))
-                    items = response['Items']
-
-                    #print(items[0])
-                    text += 'Nach '+flughafen.text+' fliegt/ist angekommen:\n'
-                    for flug in items:
-                        text += 'Flug '+flug['FlightNumber']+' nach '+flug['Start']+'\n'
-
-                    text+='\n\n\n'
                 except Exception, e:
                     print (e)
+
+
+
+                for flug in items:
+                    try:
+                        text += 'Flug '+flug['FlightNumber']+' von '+flug['Start']+' nach '+flug['Destination']+'\n'
+                    except Exception, e:
+                        print (e)
+
+            else:
+                adresse=email[1]
+                for flughafen in email[0]:
+                    print('flughafen: '+flughafen.text)
+                    try:
+
+                        response = table.scan(FilterExpression=Attr('Start').eq(flughafen.text))
+                        items = response['Items']
+                    except Exception, e:
+                        print (e)
+
+
+
+                        #print(items[0])
+                    text += '\n'
+                    text += 'Von '+flughafen.text+' startet/ist gestartet:\n'
+                    for flug in items:
+                        try:
+
+                            text += 'Flug '+flug['FlightNumber']+' nach '+flug['Destination']+'\n'
+                        except Exception, e:
+                            print (e)
+                            #=========================================================================================
+                    text += '\n'
+                    try:
+                        response = table.scan(FilterExpression=Attr('Destination').eq(flughafen.text))
+                        items = response['Items']
+                    except Exception, e:
+                        print (e)
+                    #print(items)
+                    text += 'Nach '+flughafen.text+' fliegt/ist angekommen:\n'
+                    for flug in items:
+                        try:
+                            text += 'Flug '+flug['FlightNumber']+' von '+flug['Start']+'\n'
+                        except Exception, e:
+                            print (e)
+                    text+='\n\n\n'
+                    # except Exception, e:
+                    #    print (e)
 
 
             print(text)
             print(email[1].text)
             try:
-                send(adress=email[1].text, subject='Infos zu Ihrem Lieblings-Flughafen!!!', text=text)
+                send(adress=adresse, subject='Infos zu Ihrem Lieblings-Flughafen!!!', text=text)
             except Exception, e:
-                    print (e)
-    #send(adress='flightradartu@gmail.com', subject='test', text='text')
+                print (e)
+                #send(adress='flightradartu@gmail.com', subject='test', text='text')
 
 
 def send(adress, subject, text):
     eClient = boto3.client('ses', "us-east-1", aws_access_key_id = "AKIAJTQQ3B37G5IQSTIA", aws_secret_access_key = "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")
     response = eClient.send_email(
-        Source='colin.christ303@gmail.com',
-        Destination={
-            'ToAddresses': [
-                adress,
-            ]
-        },
-        Message={
-            'Subject': {
-                'Data': subject
+            Source='colin.christ303@gmail.com',
+            Destination={
+                'ToAddresses': [
+                    adress.text,
+                ]
             },
-            'Body': {
-                'Text': {
-                    'Data': text
+            Message={
+                'Subject': {
+                    'Data': subject
                 },
-            }
-        },
+                'Body': {
+                    'Text': {
+                        'Data': text
+                    },
+                }
+            },
 
     )
