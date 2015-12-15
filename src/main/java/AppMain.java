@@ -61,7 +61,7 @@ public class AppMain {
          * Timer starten
          * ----------------------------------------------
          */
-        timer.scheduleAtFixedRate(new UpdateFlightsTimerTask(), 1000, 30 * 60 * 1000);
+        timer.scheduleAtFixedRate(new UpdateFlightsTimerTask(), 1000, 15 * 60 * 1000);
     }
 /*
 TODO
