@@ -17,6 +17,11 @@ public class GeoDatenBO {
     private static Logger logger = Logger.getLogger(GeoDatenBO.class);
     static String USERNAME = "anderst";
 
+    /**
+     * Prüft ob Flug über Brandenburg und Berlin liegt
+     * @param flight Flight Objekt
+     * @return True wenn Flug über Brandenburg
+     */
     public static boolean isFlightOverBrandenburg(Flight flight) {
         boolean flightOverBrandenburg = false;
         boolean flightOverBerlin = false;
@@ -29,6 +34,13 @@ public class GeoDatenBO {
         return (flightOverBrandenburg || flightOverBerlin);
     }
 
+    /**
+     * Überprüft ob die Gesuchte Region bei den vorhandenen Koordinaten liegt.
+     * @param latitude Längengrad
+     * @param longitude Breitengrad
+     * @param searchedRegion Gesuchte Region
+     * @return True wenn Koordinaten in der gesuchten Region liegt.
+     */
     static boolean checkWithGeoNames(float latitude, float longitude, String searchedRegion) {
         boolean isOverRegion = false;
         String jsonString = getGeoNamesPerRest(latitude, longitude);
@@ -47,6 +59,12 @@ public class GeoDatenBO {
         return isOverRegion;
     }
 
+    /**
+     * Die Methode gibt ein JSON Objekt zurück.
+     * @param latitude Längengrad
+     * @param longitude Breitengrad
+     * @return String beinhaltet ein JSON Objekt
+     */
     private static String getGeoNamesPerRest(float latitude, float longitude) {
         String response = "";
         String url = "http://api.geonames.org/countrySubdivisionJSON?formatted=true&lat=" + latitude + "&lng=" + longitude + "&username=" + USERNAME;
@@ -70,6 +88,12 @@ public class GeoDatenBO {
         return response;
     }
 
+    /**
+     * Liest den kompletten Reader aus, D.h. Zeile für Zeile und schreibt diese kontienuirlich in einen String
+     * @param rd Reader Objekt eines BufferedReader
+     * @return String
+     * @throws IOException
+     */
     private static String readAll(Reader rd) throws IOException {
 
         BufferedReader reader = new BufferedReader(rd);
