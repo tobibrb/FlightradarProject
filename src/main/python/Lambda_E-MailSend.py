@@ -21,6 +21,13 @@ def lambda_handler(event,context):
 
     bucketname = 'flightradaremail'
     bucket = s3.Bucket(bucketname)
+    try:
+        response = table.scan()
+    except Exception, e:
+        print (e)
+    print(response)
+    if(len(response['Items'])==0):
+        return
     for key in bucket.objects.all():
         #response ist ein s3Objekt
         response = s3client.get_object(Bucket=bucketname, Key=key.key, ResponseContentType="text/xml")
@@ -37,7 +44,7 @@ def lambda_handler(event,context):
             airports = email.find('airports')
             if airports is None:
                 adresse = email.find('email')
-                print(adresse)
+                print(adresse.text)
                 try:
                     response = table.scan()
                     items = response['Items']
@@ -97,7 +104,7 @@ def lambda_handler(event,context):
             print(text)
             print(email[1].text)
             try:
-                send(adress=adresse, subject='Infos zu Ihrem Lieblings-Flughafen!!!', text=text)
+                send(adress=adresse.text, subject='Infos zu Ihrem Lieblings-Flughafen!!!', text=text)
             except Exception, e:
                 print (e)
                 #send(adress='flightradartu@gmail.com', subject='test', text='text')
@@ -109,7 +116,7 @@ def send(adress, subject, text):
             Source='colin.christ303@gmail.com',
             Destination={
                 'ToAddresses': [
-                    adress.text,
+                    adress,
                 ]
             },
             Message={
