@@ -16,11 +16,12 @@ public class XmlService {
 
     /**
      * Erstellt eine XML Datei
+     *
      * @param filename Dateiname
-     * @param email Dateiinhalt in Form eines AEmail Objektes
+     * @param email    Dateiinhalt in Form eines AEmail Objektes
      * @return XML File
      */
-    public static File createEmailXml(String filename, AEmail email){
+    public static File createEmailXml(String filename, AEmail email) {
         File file = new File(filename);
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(AEmail.class);
@@ -35,10 +36,11 @@ public class XmlService {
 
     /**
      * Liest ein File vom Typ XML aus und gibt ein Objekt in der Form der XML Datei zurück.
+     *
      * @param file XML File
      * @return Gibt ein AEmail Objekt zurück
      */
-    public static AEmail readEmailXml(File file){
+    public static AEmail readEmailXml(File file) {
         AEmail email = null;
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(AEmail.class);

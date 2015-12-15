@@ -28,16 +28,17 @@ public class S3Service {
 
     /**
      * Legt eine Datei auf das S3 Bucket.
+     *
      * @param file Datei
      * @return True wenn geglückt
      */
-    protected static boolean putToS3(File file){
-        boolean isUploadSuccess=false;
+    protected static boolean putToS3(File file) {
+        boolean isUploadSuccess = false;
 
         try {
             s3Client.putObject(new PutObjectRequest(
                     bucketName, file.getName(), file));
-            isUploadSuccess=true;
+            isUploadSuccess = true;
         } catch (AmazonClientException e) {
             logger.error(e.getMessage());
         }
@@ -46,19 +47,20 @@ public class S3Service {
 
     /**
      * Holt Datei vom S3 Bucket.
+     *
      * @param keyName Dateiname im Bucket
      * @return Datei
      */
-    protected static File getFromS3(String keyName){
+    protected static File getFromS3(String keyName) {
         S3Object object;
         File file = new File(keyName);
         try {
             object = s3Client.getObject(new GetObjectRequest(bucketName, keyName));
             IOUtils.copy(object.getObjectContent(), new FileOutputStream(file));
-                    } catch (AmazonClientException e) {
-           logger.error(e.getMessage());
+        } catch (AmazonClientException e) {
+            logger.error(e.getMessage());
         } catch (FileNotFoundException e) {
-           logger.error(e.getMessage());
+            logger.error(e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,14 +69,15 @@ public class S3Service {
 
     /**
      * Löscht Datei aus dem Bucket.
+     *
      * @param keyName Dateiname im Bucket
      * @return True wenn erfolgreich
      */
-    protected static boolean deleteFromS3(String keyName){
-        boolean isDeleteSuccess= false;
+    protected static boolean deleteFromS3(String keyName) {
+        boolean isDeleteSuccess = false;
         try {
             s3Client.deleteObject(new DeleteObjectRequest(bucketName, keyName));
-            isDeleteSuccess=true;
+            isDeleteSuccess = true;
         } catch (AmazonClientException e) {
             logger.error(e.getMessage());
 

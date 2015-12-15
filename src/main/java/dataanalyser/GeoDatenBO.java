@@ -19,6 +19,7 @@ public class GeoDatenBO {
 
     /**
      * Prüft ob Flug über Brandenburg und Berlin liegt
+     *
      * @param flight Flight Objekt
      * @return True wenn Flug über Brandenburg
      */
@@ -36,8 +37,9 @@ public class GeoDatenBO {
 
     /**
      * Überprüft ob die Gesuchte Region bei den vorhandenen Koordinaten liegt.
-     * @param latitude Längengrad
-     * @param longitude Breitengrad
+     *
+     * @param latitude       Längengrad
+     * @param longitude      Breitengrad
      * @param searchedRegion Gesuchte Region
      * @return True wenn Koordinaten in der gesuchten Region liegt.
      */
@@ -61,7 +63,8 @@ public class GeoDatenBO {
 
     /**
      * Die Methode gibt ein JSON Objekt zurück.
-     * @param latitude Längengrad
+     *
+     * @param latitude  Längengrad
      * @param longitude Breitengrad
      * @return String beinhaltet ein JSON Objekt
      */
@@ -72,7 +75,7 @@ public class GeoDatenBO {
 
         InputStream is = null;
         try {
-                is = new URL(url).openStream();
+            is = new URL(url).openStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             response = readAll(rd);
         } catch (IOException e) {
@@ -90,6 +93,7 @@ public class GeoDatenBO {
 
     /**
      * Liest den kompletten Reader aus, D.h. Zeile für Zeile und schreibt diese kontienuirlich in einen String
+     *
      * @param rd Reader Objekt eines BufferedReader
      * @return String
      * @throws IOException
