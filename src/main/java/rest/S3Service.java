@@ -26,6 +26,11 @@ public class S3Service {
     private static AmazonS3 s3Client = new AmazonS3Client(new ProfileCredentialsProvider("s3"));
     private static String bucketName = "flightradaremail";
 
+    /**
+     * Legt eine Datei auf das S3 Bucket.
+     * @param file Datei
+     * @return True wenn geglückt
+     */
     protected static boolean putToS3(File file){
         boolean isUploadSuccess=false;
 
@@ -39,6 +44,11 @@ public class S3Service {
         return isUploadSuccess;
     }
 
+    /**
+     * Holt Datei vom S3 Bucket.
+     * @param keyName Dateiname im Bucket
+     * @return Datei
+     */
     protected static File getFromS3(String keyName){
         S3Object object;
         File file = new File(keyName);
@@ -54,6 +64,12 @@ public class S3Service {
         }
         return file;
     }
+
+    /**
+     * Löscht Datei aus dem Bucket.
+     * @param keyName Dateiname im Bucket
+     * @return True wenn erfolgreich
+     */
     protected static boolean deleteFromS3(String keyName){
         boolean isDeleteSuccess= false;
         try {
