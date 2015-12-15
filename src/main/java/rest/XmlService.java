@@ -14,6 +14,12 @@ import java.io.File;
 public class XmlService {
     final static Logger logger = Logger.getLogger(XmlService.class);
 
+    /**
+     * Erstellt eine XML Datei
+     * @param filename Dateiname
+     * @param email Dateiinhalt in Form eines AEmail Objektes
+     * @return XML File
+     */
     public static File createEmailXml(String filename, AEmail email){
         File file = new File(filename);
         try {
@@ -27,6 +33,11 @@ public class XmlService {
         return file;
     }
 
+    /**
+     * Liest ein File vom Typ XML aus und gibt ein Objekt in der Form der XML Datei zurück.
+     * @param file XML File
+     * @return Gibt ein AEmail Objekt zurück
+     */
     public static AEmail readEmailXml(File file){
         AEmail email = null;
         try {
