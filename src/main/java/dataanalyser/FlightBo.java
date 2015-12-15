@@ -91,15 +91,6 @@ public class FlightBo extends AFlightBo {
      */
     public void deleteOldFlights() {
         List<Flight> flights = mapper.scan(Flight.class, new DynamoDBScanExpression());
-        List<Flight> oldFlights = new ArrayList<>();
-        long oldDate = new Date().getTime() - (10 * 60 * 1000);
-        for (Flight flight : flights) {
-            long timestampFlight = flight.getTimestamp() * 1000;
-            if (timestampFlight < oldDate) {
-                logger.debug("Adding Flight to delete request: " + flight);
-                oldFlights.add(flight);
-            }
-        }
-        mapper.batchDelete(oldFlights);
+        mapper.batchDelete(flights);
     }
 }
